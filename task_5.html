@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Aurora Store – Canva Code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="color-scheme" content="dark light" />
+  <style>
+    /* Smooth scrolling and nicer scrollbars */
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { height: 10px; width: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.28); }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 text-slate-100 selection:bg-cyan-400/30">
+  <!-- Accessible live region for feedback -->
+  <div id="live" class="sr-only" aria-live="polite"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-slate-900/60 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-4 py-4">
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-fuchsia-500 grid place-items-center shadow-lg shadow-cyan-500/20 ring-1 ring-white/20">
+            <span class="text-xl">🛍️</span>
+          </div>
+          <div>
+            <h1 class="text-xl font-semibold tracking-tight">Aurora Store</h1>
+            <p class="text-xs text-slate-300/80">Capstone • HTML, CSS & JavaScript</p>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <form id="search-form" class="ml-auto flex-1 max-w-xl" role="search">
+          <label for="search" class="sr-only">Search products</label>
+          <div class="relative">
+            <input id="search" type="text" placeholder="Search products..."
+              class="w-full pl-11 pr-4 py-2.5 rounded-xl bg-slate-800/70 border border-white/10 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/70 focus:border-transparent transition" />
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="7" stroke-width="2"></circle>
+                <path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"></path>
+              </svg>
+            </div>
+          </div>
+        </form>
+
+        <!-- Sort and Cart -->
+        <div class="flex items-center gap-3">
+          <label for="sort" class="sr-only">Sort</label>
+          <select id="sort"
+            class="py-2.5 pl-3 pr-10 rounded-xl bg-slate-800/70 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-400/70 text-slate-100">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="alpha">Alphabetical</option>
+          </select>
+
+          <button id="open-cart" type="button"
+            class="relative inline-flex items-center gap-2 rounded-xl bg-cyan-500 px-4 py-2.5 font-medium text-slate-900 shadow-lg shadow-cyan-500/25 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-300/80 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 3h2l.4 2M7 13h9l3-8H6.4M7 13L5.4 5M7 13l-2 7h13m-8 0a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
+            </svg>
+            Cart
+            <span id="cart-count" class="absolute -top-2 -right-2 inline-flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-white text-slate-900 text-xs font-bold px-1.5 ring-2 ring-slate-900">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="pb-4 -mb-2">
+        <div id="categories" class="flex gap-2 overflow-x-auto pb-2">
+          <!-- Chips injected -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-6 pt-8 pb-24">
+    <div class="flex items-end justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight">Products</h2>
+        <p id="result-count" class="text-slate-300/80 text-sm mt-0.5">Loading…</p>
+      </div>
+      <div class="hidden sm:flex items-center gap-3 text-sm text-slate-300/80">
+        <span class="inline-flex items-center gap-1.5">
+          <span class="h-2 w-2 rounded-full bg-emerald-400"></span> In stock
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> Popular
+        </span>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <section id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Items injected -->
+    </section>
+
+    <!-- Empty State -->
+    <section id="empty-state" class="hidden rounded-2xl border border-dashed border-white/10 bg-slate-800/40 p-10 text-center">
+      <div class="mx-auto w-16 h-16 rounded-2xl bg-slate-700/50 grid place-items-center mb-4">
+        <span class="text-2xl">🔍</span>
+      </div>
+      <h3 class="text-lg font-semibold mb-1">No results found</h3>
+      <p class="text-slate-300/80">Try adjusting your search, category, or sort order.</p>
+    </section>
+  </main>
+
+  <!-- Cart Drawer -->
+  <aside id="cart-drawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md translate-x-full transition-transform duration-300">
+    <div class="h-full bg-slate-900/95 backdrop-blur border-l border-white/10 shadow-2xl flex flex-col">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-5 border-b border-white/10">
+        <div>
+          <h3 class="text-xl font-semibold">Your Cart</h3>
+          <p class="text-slate-300/80 text-sm">Review items and adjust quantities</p>
+        </div>
+        <button id="close-cart" class="p-2 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-cyan-400/70" aria-label="Close cart">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Items -->
+      <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4">
+        <!-- Items injected -->
+      </div>
+
+      <!-- Footer -->
+      <div class="p-5 border-t border-white/10 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-300/90">Subtotal</span>
+          <span id="cart-subtotal" class="text-lg font-semibold">$0.00</span>
+        </div>
+        <button id="checkout-btn" class="w-full rounded-xl bg-emerald-400 text-slate-900 font-semibold py-3 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-300/80 transition">
+          Checkout (Demo)
+        </button>
+        <p class="text-xs text-slate-400 text-center">This is a demo checkout. No payments are processed.</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Overlay for cart and modals -->
+  <div id="overlay" class="fixed inset-0 z-40 bg-black/40 opacity-0 pointer-events-none transition-opacity"></div>
+
+  <!-- Product Quick View Modal -->
+  <div id="quickview" class="fixed inset-0 z-50 opacity-0 pointer-events-none transition-opacity">
+    <div class="flex items-end sm:items-center justify-center min-h-full p-4">
+      <div class="relative w-full max-w-2xl rounded-2xl bg-slate-900/95 border border-white/10 shadow-xl overflow-hidden">
+        <div class="flex items-start justify-between p-5 border-b border-white/10">
+          <div>
+            <h3 id="qv-name" class="text-xl font-semibold">Product</h3>
+            <p id="qv-category" class="text-slate-300/80 text-sm mt-0.5">Category</p>
+          </div>
+          <button id="qv-close" class="p-2 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-cyan-400/70" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div id="qv-media" class="rounded-xl bg-slate-800/60 border border-white/10 aspect-video md:aspect-square overflow-hidden grid place-items-center">
+            <!-- SVG injected -->
+          </div>
+          <div class="space-y-4">
+            <p id="qv-desc" class="text-slate-300/90">Description</p>
+            <div class="text-2xl font-semibold" id="qv-price">$0.00</div>
+            <div class="flex items-center gap-3">
+              <label for="qv-qty" class="sr-only">Quantity</label>
+              <div class="inline-flex items-center rounded-xl border border-white/10 overflow-hidden">
+                <button id="qv-minus" class="px-3 py-2 hover:bg-white/5" aria-label="Decrease quantity">−</button>
+                <input id="qv-qty" type="number" min="1" value="1" class="w-14 text-center bg-transparent focus:outline-none py-2">
+                <button id="qv-plus" class="px-3 py-2 hover:bg-white/5" aria-label="Increase quantity">+</button>
+              </div>
+              <button id="qv-add" class="flex-1 rounded-xl bg-cyan-500 text-slate-900 font-semibold py-2.5 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-300/80 transition">Add to Cart</button>
+            </div>
+            <div class="text-xs text-slate-400">Ships in 24–48h • Free returns within 30 days</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] pointer-events-none">
+    <div class="px-4 py-2 rounded-xl bg-slate-800/90 border border-white/10 shadow-lg opacity-0 translate-y-2 transition">
+      <span id="toast-text" class="text-sm"></span>
+    </div>
+  </div>
+
+  <script>
+    // --- Data ---------------------------------------------------------------
+    const products = [
+      {
+        id: 'p1',
+        name: 'Nova X Smartphone',
+        price: 499,
+        category: 'Electronics',
+        popularity: 98,
+        color: '#22d3ee',
+        description: 'A sleek phone with a vivid edge-to-edge display, all-day battery, and a pro-grade camera.',
+        image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=60'
+      },
+      {
+        id: 'p2',
+        name: 'Aether Headphones',
+        price: 119,
+        category: 'Audio',
+        popularity: 92,
+        color: '#a78bfa',
+        description: 'Comfortable wireless headphones with active noise cancelation and rich, balanced sound.',
+        image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1200&q=60'
+      },
+      {
+        id: 'p3',
+        name: 'Pulse Smartwatch',
+        price: 219,
+        category: 'Wearables',
+        popularity: 85,
+        color: '#34d399',
+        description: 'Track health stats, get notifications, and enjoy a bright always-on display.',
+        image: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=1200&q=60'
+      },
+      {
+        id: 'p4',
+        name: 'Lumen Laptop',
+        price: 899,
+        category: 'Computers',
+        popularity: 88,
+        color: '#f472b6',
+        description: 'Lightweight performance laptop built for multitasking, creators, and on-the-go productivity.',
+        image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=60'
+      },
+      {
+        id: 'p5',
+        name: 'Echo Mini Speaker',
+        price: 59,
+        category: 'Audio',
+        popularity: 77,
+        color: '#fb923c',
+        description: 'Pocket-sized speaker with room-filling sound and 12-hour battery life.',
+        image: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=1200&q=60'
+      },
+      {
+        id: 'p6',
+        name: 'Orbit Tablet',
+        price: 349,
+        category: 'Electronics',
+        popularity: 81,
+        color: '#60a5fa',
+        description: 'Crisp display, split-screen multitasking, and stylus support for notes and sketches.',
+        image: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&w=1200&q=60'
+      },
+      {
+        id: 'p7',
+        name: 'Nimbus Keyboard',
+        price: 89,
+        category: 'Accessories',
+        popularity: 70,
+        color: '#f59e0b',
+        description: 'Low-latency wireless keyboard with soft backlighting and a compact layout.',
+        image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=60'
+      },
+      {
+        id: 'p8',
+        name: 'Glide Mouse',
+        price: 49,
+        category: 'Accessories',
+        popularity: 74,
+        color: '#2dd4bf',
+        description: 'Ergonomic mouse with precision tracking and smooth, silent clicks.',
+        image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1200&q=60'
+      }
+    ];
+    const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
+
+    // --- Helpers ------------------------------------------------------------
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => document.querySelectorAll(sel);
+    const fmt = n => n.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+
+    function productSVG(color = '#22d3ee') {
+      // Fallback art used when an image fails
+      const id = Math.random().toString(36).slice(2, 7);
+      return `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" class="w-full h-full">
+          <defs>
+            <linearGradient id="g-${id}" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="${color}" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0.8" />
+            </linearGradient>
+            <radialGradient id="r-${id}" cx="70%" cy="30%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+          <rect width="480" height="360" rx="24" fill="url(#g-${id})"></rect>
+          <circle cx="400" cy="60" r="120" fill="url(#r-${id})"></circle>
+          <g transform="translate(80,90)">
+            <rect x="0" y="0" width="320" height="180" rx="22" fill="rgba(15, 23, 42, 0.35)"></rect>
+            <rect x="16" y="16" width="120" height="148" rx="14" fill="rgba(255, 255, 255, 0.15)"></rect>
+            <rect x="152" y="30" width="152" height="16" rx="8" fill="rgba(255,255,255,0.6)"></rect>
+            <rect x="152" y="56" width="136" height="12" rx="6" fill="rgba(255,255,255,0.5)"></rect>
+            <rect x="152" y="80" width="148" height="12" rx="6" fill="rgba(255,255,255,0.45)"></rect>
+            <rect x="152" y="104" width="120" height="12" rx="6" fill="rgba(255,255,255,0.4)"></rect>
+            <rect x="152" y="135" width="80" height="18" rx="9" fill="rgba(16, 185, 129, 0.9)"></rect>
+          </g>
+        </svg>
+      `;
+    }
+
+    function saveCart(cart) {
+      try { localStorage.setItem('cc_cart', JSON.stringify(cart)); } catch {}
+    }
+    function loadCart() {
+      try {
+        const raw = localStorage.getItem('cc_cart');
+        return raw ? JSON.parse(raw) : {};
+      } catch { return {}; }
+    }
+
+    // --- State --------------------------------------------------------------
+    const state = {
+      cart: loadCart(), // { id: qty }
+      filters: { search: '', category: 'All', sort: 'featured' },
+      quickViewId: null
+    };
+
+    // --- Rendering ----------------------------------------------------------
+    const productListEl = document.getElementById('product-list');
+    const resultCountEl = document.getElementById('result-count');
+    const categoriesEl = document.getElementById('categories');
+    const emptyStateEl = document.getElementById('empty-state');
+    const cartCountEl = document.getElementById('cart-count');
+
+    function renderCategories() {
+      categoriesEl.replaceChildren(
+        ...categories.map(cat => {
+          const btn = document.createElement('button');
+          const selected = state.filters.category === cat;
+          btn.className =
+            'px-4 py-2 rounded-full border text-sm transition ' +
+            (selected
+              ? 'bg-cyan-500 text-slate-900 border-transparent shadow shadow-cyan-500/30'
+              : 'bg-slate-800/60 text-slate-200 border-white/10 hover:bg-slate-700/50');
+          btn.textContent = cat;
+          btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+          btn.addEventListener('click', () => {
+            state.filters.category = cat;
+            renderProducts();
+            highlightCategories();
+          });
+          btn.dataset.category = cat;
+          return btn;
+        })
+      );
+    }
+    function highlightCategories() {
+      categoriesEl.querySelectorAll('button').forEach(btn => {
+        const selected = btn.dataset.category === state.filters.category;
+        btn.className =
+          'px-4 py-2 rounded-full border text-sm transition ' +
+          (selected
+            ? 'bg-cyan-500 text-slate-900 border-transparent shadow shadow-cyan-500/30'
+            : 'bg-slate-800/60 text-slate-200 border-white/10 hover:bg-slate-700/50');
+        btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+      });
+    }
+
+    function filteredProducts() {
+      const q = state.filters.search.trim().toLowerCase();
+      let list = products.filter(p =>
+        (state.filters.category === 'All' || p.category === state.filters.category) &&
+        (q === '' || p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q))
+      );
+      switch (state.filters.sort) {
+        case 'price-asc': list.sort((a,b) => a.price - b.price); break;
+        case 'price-desc': list.sort((a,b) => b.price - a.price); break;
+        case 'alpha': list.sort((a,b) => a.name.localeCompare(b.name)); break;
+        default: list.sort((a,b) => b.popularity - a.popularity); // featured
+      }
+      return list;
+    }
+
+    function productCard(p) {
+      const card = document.createElement('article');
+      card.className = 'group rounded-2xl overflow-hidden bg-slate-800/60 border border-white/10 hover:border-cyan-400/40 transition shadow-sm hover:shadow-lg hover:shadow-cyan-500/10';
+      const media = p.image
+        ? `<img src="${p.image}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover" onerror="this.src=''; this.alt='Image failed to load'; this.closest('.media').innerHTML=productSVG('${p.color}')">`
+        : productSVG(p.color);
+      card.innerHTML = `
+        <div class="media aspect-[4/3] bg-slate-800/60 overflow-hidden">
+          ${media}
+        </div>
+        <div class="p-4 space-y-2">
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-semibold leading-tight">${p.name}</h3>
+            <div class="text-emerald-400 font-semibold">${fmt(p.price)}</div>
+          </div>
+          <p class="text-sm text-slate-300/80 line-clamp-2">${p.description}</p>
+          <div class="flex items-center justify-between pt-2">
+            <span class="text-xs px-2 py-1 rounded-full bg-white/5 border border-white/10">${p.category}</span>
+            <div class="flex items-center gap-2">
+              <button class="rounded-xl px-3 py-2 text-sm bg-white/5 border border-white/10 hover:bg-white/10 transition"
+                data-qv="${p.id}" aria-label="Quick view ${p.name}">Quick View</button>
+              <button class="rounded-xl px-3.5 py-2 text-sm font-semibold bg-cyan-500 text-slate-900 hover:bg-cyan-400 transition"
+                data-add="${p.id}" aria-label="Add ${p.name} to cart">Add</button>
+            </div>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    function renderProducts() {
+      const list = filteredProducts();
+      resultCountEl.textContent = `${list.length} product${list.length === 1 ? '' : 's'} ${state.filters.category !== 'All' ? 'in ' + state.filters.category : ''}`;
+      emptyStateEl.classList.toggle('hidden', list.length > 0);
+      if (list.length === 0) {
+        productListEl.replaceChildren();
+        return;
+      }
+      const fr = document.createDocumentFragment();
+      list.forEach(p => fr.appendChild(productCard(p)));
+      productListEl.replaceChildren(fr);
+      // Bind actions
+      productListEl.querySelectorAll('[data-add]').forEach(btn => {
+        btn.addEventListener('click', () => addToCart(btn.dataset.add, 1));
+      });
+      productListEl.querySelectorAll('[data-qv]').forEach(btn => {
+        btn.addEventListener('click', () => openQuickView(btn.dataset.qv));
+      });
+    }
+
+    // --- Cart ---------------------------------------------------------------
+    const drawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('overlay');
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartSubtotalEl = document.getElementById('cart-subtotal');
+
+    function cartEntries() {
+      return Object.entries(state.cart).map(([id, qty]) => {
+        const p = products.find(x => x.id === id);
+        return p ? { ...p, qty } : null;
+      }).filter(Boolean);
+    }
+
+    function updateCartCount() {
+      const count = Object.values(state.cart).reduce((a, b) => a + b, 0);
+      cartCountEl.textContent = count;
+      cartCountEl.classList.toggle('hidden', count === 0);
+    }
+
+    function renderCart() {
+      const items = cartEntries();
+      if (items.length === 0) {
+        cartItemsEl.innerHTML = `
+          <div class="text-center p-10 rounded-xl border border-dashed border-white/10 bg-slate-800/40">
+            <div class="mx-auto w-14 h-14 rounded-2xl bg-slate-700/50 grid place-items-center mb-3">🧺</div>
+            <p class="font-medium mb-1">Your cart is empty</p>
+            <p class="text-slate-300/80 text-sm">Browse products and add something you like.</p>
+          </div>
+        `;
+      } else {
+        const fr = document.createDocumentFragment();
+        items.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'flex gap-4 p-3 rounded-xl border border-white/10 bg-slate-800/40';
+          row.innerHTML = `
+            <div class="w-20 h-20 rounded-lg overflow-hidden bg-slate-800/60 border border-white/10 shrink-0">
+              ${productSVG(item.color)}
+            </div>
+            <div class="flex-1">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="font-medium leading-tight">${item.name}</p>
+                  <p class="text-xs text-slate-400 mt-0.5">${item.category}</p>
+                </div>
+                <button class="p-2 rounded-lg hover:bg-white/5" aria-label="Remove ${item.name}" data-remove="${item.id}">✕</button>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <div class="inline-flex items-center rounded-xl border border-white/10 overflow-hidden">
+                  <button class="px-3 py-1.5 hover:bg-white/5" aria-label="Decrease ${item.name}" data-dec="${item.id}">−</button>
+                  <span class="w-10 text-center">${item.qty}</span>
+                  <button class="px-3 py-1.5 hover:bg-white/5" aria-label="Increase ${item.name}" data-inc="${item.id}">+</button>
+                </div>
+                <div class="font-semibold text-emerald-400">${fmt(item.price * item.qty)}</div>
+              </div>
+            </div>
+          `;
+          fr.appendChild(row);
+        });
+        cartItemsEl.replaceChildren(fr);
+
+        cartItemsEl.querySelectorAll('[data-remove]').forEach(b => b.addEventListener('click', () => removeFromCart(b.dataset.remove)));
+        cartItemsEl.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', () => changeQty(b.dataset.inc, +1)));
+        cartItemsEl.querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', () => changeQty(b.dataset.dec, -1)));
+      }
+      const subtotal = cartEntries().reduce((sum, i) => sum + i.price * i.qty, 0);
+      cartSubtotalEl.textContent = fmt(subtotal);
+      updateCartCount();
+    }
+
+    function addToCart(id, qty = 1) {
+      state.cart[id] = (state.cart[id] || 0) + qty;
+      saveCart(state.cart);
+      renderCart();
+      say(`Added ${qty} × ${products.find(p => p.id === id)?.name || 'item'} to cart`);
+      toast('Added to cart');
+      openDrawer();
+    }
+    function removeFromCart(id) {
+      const name = products.find(p => p.id === id)?.name || 'item';
+      delete state.cart[id];
+      saveCart(state.cart);
+      renderCart();
+      say(`Removed ${name} from cart`);
+      toast('Removed from cart');
+    }
+    function changeQty(id, delta) {
+      if (!state.cart[id]) return;
+      state.cart[id] += delta;
+      if (state.cart[id] <= 0) delete state.cart[id];
+      saveCart(state.cart);
+      renderCart();
+    }
+
+    // --- Drawer / Overlay ---------------------------------------------------
+    function openDrawer() {
+      drawer.style.transform = 'translateX(0%)';
+      overlay.classList.remove('pointer-events-none');
+      overlay.style.opacity = '1';
+    }
+    function closeDrawer() {
+      drawer.style.transform = 'translateX(100%)';
+      overlay.classList.add('pointer-events-none');
+      overlay.style.opacity = '0';
+    }
+
+    document.getElementById('open-cart').addEventListener('click', openDrawer);
+    document.getElementById('close-cart').addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', () => {
+      closeDrawer();
+      closeQuickView();
+    });
+
+    // --- Quick View ---------------------------------------------------------
+    const qv = {
+      root: document.getElementById('quickview'),
+      name: document.getElementById('qv-name'),
+      cat: document.getElementById('qv-category'),
+      desc: document.getElementById('qv-desc'),
+      price: document.getElementById('qv-price'),
+      media: document.getElementById('qv-media'),
+      qty: document.getElementById('qv-qty'),
+      add: document.getElementById('qv-add'),
+      plus: document.getElementById('qv-plus'),
+      minus: document.getElementById('qv-minus'),
+      close: document.getElementById('qv-close')
+    };
+
+    function openQuickView(id) {
+      state.quickViewId = id;
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      qv.name.textContent = p.name;
+      qv.cat.textContent = p.category;
+      qv.desc.textContent = p.description;
+      qv.price.textContent = fmt(p.price);
+      if (p.image) {
+        qv.media.innerHTML = `<img src="${p.image}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover" onerror="this.src=''; this.alt='Image failed to load'; this.parentElement.innerHTML=productSVG('${p.color}')">`;
+      } else {
+        qv.media.innerHTML = productSVG(p.color);
+      }
+      qv.qty.value = 1;
+      qv.root.style.opacity = '1';
+      qv.root.classList.remove('pointer-events-none');
+      overlay.classList.remove('pointer-events-none');
+      overlay.style.opacity = '1';
+    }
+    function closeQuickView() {
+      qv.root.style.opacity = '0';
+      qv.root.classList.add('pointer-events-none');
+    }
+    qv.close.addEventListener('click', closeQuickView);
+    qv.plus.addEventListener('click', () => qv.qty.value = Math.max(1, (+qv.qty.value || 1) + 1));
+    qv.minus.addEventListener('click', () => qv.qty.value = Math.max(1, (+qv.qty.value || 1) - 1));
+    qv.add.addEventListener('click', () => {
+      const id = state.quickViewId;
+      const qty = Math.max(1, +qv.qty.value || 1);
+      addToCart(id, qty);
+      closeQuickView();
+    });
+
+    // --- Search / Sort ------------------------------------------------------
+    document.getElementById('search-form').addEventListener('submit', e => e.preventDefault());
+    document.getElementById('search').addEventListener('input', (e) => {
+      state.filters.search = e.target.value;
+      renderProducts();
+    });
+    document.getElementById('sort').addEventListener('change', (e) => {
+      state.filters.sort = e.target.value;
+      renderProducts();
+    });
+
+    // --- Checkout (Demo) ----------------------------------------------------
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      toast('This is a demo checkout. No payments are processed.');
+      say('Demo checkout: no payments processed');
+    });
+
+    // --- Feedback -----------------------------------------------------------
+    function say(text) {
+      const live = document.getElementById('live');
+      live.textContent = text;
+    }
+    let toastTimer = null;
+    function toast(text) {
+      const box = document.querySelector('#toast > div');
+      const span = document.getElementById('toast-text');
+      span.textContent = text;
+      box.style.opacity = '1';
+      box.style.transform = 'translateY(0)';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        box.style.opacity = '0';
+        box.style.transform = 'translateY(0.5rem)';
+      }, 1600);
+    }
+
+    // --- Init ---------------------------------------------------------------
+    renderCategories();
+    highlightCategories();
+    renderProducts();
+    renderCart();
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98434470b0e5ff9f',t:'MTc1ODcyNzI0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
